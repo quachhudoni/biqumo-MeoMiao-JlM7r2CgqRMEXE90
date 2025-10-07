@@ -1,2 +1,145 @@
-# biqumo-MeoMiao-JlM7r2CgqRMEXE90
-MeoMiao-萌猫机场加速器下载:官网优惠码 
+[合集 - DeploySharp(1)](https://github.com)
+
+1.基于DeploySharp 的深度学习模型部署测试平台：支持YOLO全系列模型10-07
+
+收起
+
+## 1. 程序获取和下载
+
+  基于DeploySharp 开发的深度学习模型部署测试平台，提供了YOLO框架的主流系列模型，包括YOLOv5~v13，以及其系列下的Detection、Segmentation、Oriented Bounding Box、Human Pose Estimation等应用场景。模型部署引擎支持OpenVINO™、ONNX runtime，支持CPU、IGPU以及GPU多种设备推理。项目链接为：
+
+```
+https://github.com/guojin-yan/DeploySharp/tree/DeploySharpV1.0/applications
+```
+
+  如果你想快速使用该平台，可以加入QQ技术交流群通过群文件下载，或者通过GitHub在DeploySharp 项目中下载。
+
+```
+ git clone https://github.com/guojin-yan/DeploySharp.git
+ cd DeploySharp/applications
+```
+
+  打开指定目录后，直接打开`DeploySharp-Applications.sln`解决方案即可。
+
+![image-20251003123525415](https://img2024.cnblogs.com/blog/2933426/202510/2933426-20251007174954408-31182387.png)
+
+  打开解决方案后，资源管理器中有两个项目，一个是.NET 6.0框架，一个是.NET Framework 4.8框架，用户可以根据自己需求进行运行。
+
+![image-20251003123554619](https://img2024.cnblogs.com/blog/2933426/202510/2933426-20251007174954390-1891783917.png)
+
+  程序运行后页面如下图所示：
+
+![image-20251002182043813](https://img2024.cnblogs.com/blog/2933426/202510/2933426-20251007174954402-288049657.png)
+
+## 2. 平台介绍
+
+### 2.1 支持的模型选项
+
+基于DeploySharp 开发的深度学习模型部署测试平台所支持的模型列表与DeploySharp 库一致，后续会跟着DeploySharp 迭代进行同步更新，具体支持的模型：
+
+![image-20251003131537123](https://img2024.cnblogs.com/blog/2933426/202510/2933426-20251007174954420-1126100483.png)
+
+> 开发者在使用时，可以根据自己需求进行选择，但在使用时，模型路径“`Model Path`”选择的模型类型，要和“`Model Type`保持一致，否者程序运行可能出差或者结果出现错误。
+
+### 2.2 支持的推理引擎工具
+
+基于DeploySharp 开发的深度学习模型部署测试平台所支持多种推理引擎，其中已经开发完成并已经支持的有OpenVINO和ONNX Runtime，其中TensorRT正在开发中，不日后会完成支持。
+
+![image-20251003131610600]()
+
+其中当推理设备选择ONNX Runtime时，还可以选择ONNX Runtime运行的推理引擎，支持的内容如下图所示：
+
+![image-20251003131828937]()
+
+​ ONNX Runtime支持的更多加速方式，需要用户自己进行代码构建，其构建流程与方式，参考官方教程即可，链接为：
+
+```
+https://runtime.onnx.org.cn/docs/execution-providers/
+```
+
+### 2.3 支持的推理设备
+
+同时用户还可以选择不同的推理设备，包括AUTO、CPU、GPU0、GPU1、NPU，其中GPU0、GPU1表示的含义要在使用的推理引擎工具中确定。
+
+![image-20251003131706230]()
+
+## 3. 推理引擎和设备匹配使用
+
+| 推理引擎 | 推理设备 | ONNX加速 |
+| --- | --- | --- |
+| OpenVINO | AUTO，CPU，GPU0(Intel 集显)，GPU1(Intel 独显)，NPU | Default |
+| ONNX Runtime | CPU | Default |
+| ONNX Runtime | AUTO，CPU，GPU0(Intel 集显)，GPU1(Intel 独显)，NPU | OpenVINO |
+| ONNX Runtime | GPU0(英伟达独显)，GPU1(英伟达独显) | Cuda |
+| ONNX Runtime | GPU0，GPU1 | DML |
+
+## 4. 程序运行示例
+
+在对应的项目中，图像处理库已经安装，不同项目就是使用的不同图像处理库，下面演示使用不同的模型推理引擎使用流程。
+
+### 4.1 OpenVINO推理
+
+所下载的项目中已经配置好了OpenVINO环境，选择模型和图片后，直接运行即可。推理结果如下图所示：
+
+![image-20251003141905755]()
+
+> 如果使用的是.NET Framework 4.8框架，在程序运行前，请卸载并重新安装一下`OpenVINO.runtime.win` NuGet Package，重新生成项目后，进入到项目bin/Debug或者bin/Release目录，找到该目录下的文件夹dll/win-x64，在该目录下可以看到openvino\_c.dll文件，然后将该目录下所有文件，复制到bin/Debug或者bin/Release目录下，重新再生成一下项目。如果使用的.NET 6.0框架，
+
+### 4.2 ONNX Runtime推理
+
+如果只是用ONNX Runtime推理，不需要安装其他的依赖既可以使用，默认只能使用CPU推理，如下图所示：
+
+![image-20251003143004837]()
+
+### 4.3 ONNX Runtime推理 + OpenVINO加速
+
+如果是用ONNX Runtime推理并配合OpenVINO加速，则需要安装额外的依赖库:
+
+```
+Intel.ML.OnnxRuntime.OpenVino
+```
+
+安装完成后，运行程序即可，其中原生OpenVINO支持的推理设备AUTO、CPU、GPU0(Intel 集显)、GPU1(Intel 独显)、NPU，在此处均可以使用，如下图所示：
+
+![image-20251003144046348]()
+
+> 如果使用的是.NET Framework 4.8框架，安装完`Intel.ML.OnnxRuntime.OpenVino`后，如果依旧报错：”无法在 DLL“onnxruntime”中找到名为“OrtSessionOptionsAppendExecutionProvider\_OpenVINO”的入口点。”，可以找到`Intel.ML.OnnxRuntime.OpenVino`包目录，然后将该目录下的所有dll文件，复制到项目的bin/Debug或者bin/Release目录下即可。
+
+### 4.4 ONNX Runtime推理 + DML加速
+
+如果是用ONNX Runtime推理并配合DML加速，则需要安装额外的依赖库:
+
+```
+Microsoft.ML.OnnxRuntime.DirectML
+```
+
+安装完成后，运行程序即可，此处可以使用GPU、GPU1，如下图所示：
+
+![image-20251003145255956]()
+
+## 5.模型运行时间测试
+
+​ 在开发的模型部署平台上进行时间测试，当前的测试环境为：
+
+* CPU: Intel(R) Core(TM) Ultra 9 288V
+* IGPU: Intel(R) Arc(TM) 140V GPU (16GB)
+* NPU: Intel(R) AI Boost
+
+在同一环境下，对其中一些模型进行了测试，如下表所示：
+
+| Model Name | OpenVINO CPU | OpenVINO IGPU | OpenVINO NPU | ONNX Runtime CPU | ONNX Runtime OpenVINO CPU | ONNX Runtime DirectML IGPU |
+| --- | --- | --- | --- | --- | --- | --- |
+| **YOLOv5s-det** | 16.84 FPS | 60.23 FPS | 48.36 FPS | 21.06 FPS | 16.80 FPS | 40.11 FPS |
+| **YOLOv5-seg** | 8.91 FPS | 21.24 FPS | 20.11 FPS | 10.86 FPS | 8.56 FPS | 16.54 FPS |
+| **YOLOv8s-det** | 12.02 FPS | 67.74 FPS | 51.84 FPS | 14.84 FPS | 11.52 FPS | 36.38 FPS |
+| **YOLOv8s-seg** | 6.30 FPS | 15.96 FPS | 14.09 FPS | 7.17 FPS | 6.24 FPS | 12.71 FPS |
+| **YOLOv8s-obb** | 4.61 FPS | 35.13 FPS | 20.02 FPS | 5.62 FPS | 4.56 FPS | 15.80 FPS |
+| **YOLOv11s-det** | 13.48 FPS | 62.40 FPS | 53.51 FPS | 15.71 FPS | 13.41 FPS | 38.83 FPS |
+| **YOLOv11s-seg** | 6.64 FPS | 16.18 FPS | 14.46 FPS | 7.55 FPS | 6.59 FPS | 12.74 FPS |
+| **YOLOv11s-obb** | 5.58 FPS | 33.14 FPS | 19.99 FPS | 6.35 FPS | 5.56 FPS | 17.87 FPS |
+
+  以上便是基于DeploySharp 开发的深度学习模型部署测试平台的安装和使用教程。最后如果各位开发者在使用中有任何问题，欢迎大家与我联系。
+
+![image-20250224211044113]()
+
+本博客参考[wgetcloud全球加速器服务](https://wgetcloud6.org)。转载请注明出处！
